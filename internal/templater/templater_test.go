@@ -95,3 +95,15 @@ func TestRender_CustomDelimiters(t *testing.T) {
 		t.Errorf("got %q", result.Output)
 	}
 }
+
+func TestRender_EmptyEnv(t *testing.T) {
+	opts := DefaultOptions()
+	opts.FailOnMissing = false
+	result, err := Render(`{{ env "APP_NAME" }}`, map[string]string{}, opts)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(result.MissingKeys) != 1 || result.MissingKeys[0] != "APP_NAME" {
+		t.Errorf("expected APP_NAME in missing keys, got %v", result.MissingKeys)
+	}
+}
