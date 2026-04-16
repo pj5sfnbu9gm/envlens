@@ -1,14 +1,7 @@
-// Package comparator orchestrates loading and diffing of multiple deployment
-// targets against a single baseline environment file.
+// Package comparator loads multiple named environment files and compares
+// each one against a designated baseline target, collecting all diff
+// results into a map keyed by target name.
 //
-// It ties together the loader, resolver, and differ packages to provide a
-// high-level API used by the CLI:
-//
-//	results, err := comparator.CompareAll("production", targets)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	for _, diff := range results {
-//		fmt.Printf("--- %s vs %s ---\n", diff.From, diff.To)
-//	}
+// Use CompareAll to run the full comparison and HasChanges to quickly
+// determine whether any differences were found.
 package comparator
