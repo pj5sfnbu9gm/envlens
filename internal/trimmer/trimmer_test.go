@@ -94,3 +94,12 @@ func TestTrim_DoesNotMutateOriginal(t *testing.T) {
 		t.Error("original map should not be mutated")
 	}
 }
+
+func TestTrim_EmptyInput(t *testing.T) {
+	env := map[string]string{}
+	opts := trimmer.DefaultOptions()
+	out := trimmer.Trim(env, opts)
+	if len(out) != 0 {
+		t.Errorf("expected empty output for empty input, got %d entries", len(out))
+	}
+}
