@@ -36,7 +36,7 @@ func IsSensitive(key string) bool {
 }
 
 // Mask redacts a value according to the given options.
-// If the value is shorter than ShowChars the entire value is replaced.
+// If the value is shorter than or equal to ShowChars the entire value is replaced.
 func Mask(value string, opts MaskOptions) string {
 	if opts.ShowChars <= 0 || len(value) <= opts.ShowChars {
 		return opts.Placeholder
@@ -56,4 +56,15 @@ func MaskEnv(env map[string]string, opts MaskOptions) map[string]string {
 		}
 	}
 	return out
+}
+
+// SensitiveKeys returns the list of keys from env that are considered sensitive.
+func SensitiveKeys(env map[string]string) []string {
+	keys := make([]string, 0)
+	for k := range env {
+		if IsSensitive(k) {
+			keys = append(keys, k)
+		}
+	}
+	return keys
 }
