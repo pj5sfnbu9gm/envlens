@@ -55,6 +55,15 @@ func TestStringify_EmptyEnv(t *testing.T) {
 	}
 }
 
+func TestStringify_EmptyValue(t *testing.T) {
+	env := map[string]string{"EMPTY": ""}
+	opts := stringer.DefaultOptions()
+	out := stringer.Stringify(env, opts)
+	if out != "EMPTY=" {
+		t.Errorf("expected 'EMPTY=', got: %s", out)
+	}
+}
+
 func TestToLines_Count(t *testing.T) {
 	env := sampleEnv()
 	lines := stringer.ToLines(env, stringer.DefaultOptions())
