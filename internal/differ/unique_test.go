@@ -77,3 +77,20 @@ func TestFindUnique_SortedOutput(t *testing.T) {
 		t.Errorf("expected sorted target order, got %v, %v", results[0].Target, results[1].Target)
 	}
 }
+
+func TestFindUnique_KeysSorted(t *testing.T) {
+	targets := map[string]map[string]string{
+		"only": {"ZEBRA": "1", "APPLE": "2", "MANGO": "3"},
+	}
+	results := FindUnique(targets)
+	if len(results) != 1 {
+		t.Fatalf("expected 1 result, got %d", len(results))
+	}
+	keys := results[0].Keys
+	for i := 1; i < len(keys); i++ {
+		if keys[i] < keys[i-1] {
+			t.Errorf("expected sorted keys, got %v", keys)
+			break
+		}
+	}
+}
