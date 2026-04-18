@@ -62,5 +62,21 @@ func ToLines(env map[string]string, opts Options) []string {
 	if result == "" {
 		return []string{}
 	}
-	return strings.Split(result, opts.Delimiter)
+	delim := opts.Delimiter
+	if delim == "" {
+		delim = "\n"
+	}
+	return strings.Split(result, delim)
+}
+
+// Filter returns a new env map containing only the keys that satisfy the
+// predicate fn. Useful for selecting a subset before stringifying.
+func Filter(env map[string]string, fn func(key, value string) bool) map[string]string {
+	out := make(map[string]string)
+	for k, v := range env {
+		if fn(k, v) {
+			out[k] = v
+		}
+	}
+	return out
 }
