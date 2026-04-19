@@ -20,28 +20,28 @@ func DefaultRenameOptions(w io.Writer) RenameOptions {
 
 // RenameEntry records a single key rename.
 type RenameEntry struct {
-	From string `json:"from"`
-	To   string `json:"to"`
+	From  string `json:"from"`
+	To    string `json:"to"`
 	Value string `json:"value"`
 }
 
 // ReportRename compares original and renamed maps and writes a report.
+// It detects renames by finding keys missing from renamed whose value
+// appears under a new key that did not exist in original.
 func ReportRename(original, renamed map[string]string, opts RenameOptions) error {
 	var entries []RenameEntry
 	for k, v := range original {
-		nv, ok := renamed[k]
-		if !ok {
-			// Key was renamed – find new name by value match (best-effort).
-			for newK, newV := range renamed {
-				if newV == v {
-					_, existedBefore := original[newK]
-					if !existedBefore {
-						entries = append(entries, RenameEntry{From: k, To: newK, Value: v})
-						break
-					}
+		if _, ok := renamed[k]; ok {
+			continue
+		}
+		// Key was renamed – find new name by value match (best-effort).
+		for newK, newV := range renamed {
+			if newV == v {
+				if _, existedBefore := original[newK]; !existedBefore {
+					entries = append(entries, RenameEntry{From: k, To: newK, Value: v})
+					break
 				}
 			}
-			_ = nv
 		}
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].From < entries[j].From })
