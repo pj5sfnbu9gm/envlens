@@ -48,6 +48,16 @@ func Lint(env map[string]string, rules []Rule) []Finding {
 	return findings
 }
 
+// HasErrors reports whether any of the provided findings have SeverityError.
+func HasErrors(findings []Finding) bool {
+	for _, f := range findings {
+		if f.Severity == SeverityError {
+			return true
+		}
+	}
+	return false
+}
+
 // RuleNoEmptyValue flags keys with empty values.
 func RuleNoEmptyValue(key, value string) *Finding {
 	if strings.TrimSpace(value) == "" {
