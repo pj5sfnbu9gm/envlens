@@ -55,6 +55,7 @@ func Render(tmplText string, env map[string]string, opts Options) (Result, error
 		},
 		"upper": strings.ToUpper,
 		"lower": strings.ToLower,
+		"trim":  strings.TrimSpace,
 	}
 
 	t, err := template.New("envlens").
