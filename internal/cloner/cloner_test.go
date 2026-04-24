@@ -77,3 +77,20 @@ func TestClone_KeySuffix(t *testing.T) {
 		t.Error("expected APP_HOST_COPY")
 	}
 }
+
+func TestClone_EmptyMap(t *testing.T) {
+	out := cloner.Clone(map[string]string{}, cloner.DefaultOptions())
+	if len(out) != 0 {
+		t.Fatalf("expected empty map, got %d keys", len(out))
+	}
+}
+
+func TestClone_NilMap(t *testing.T) {
+	out := cloner.Clone(nil, cloner.DefaultOptions())
+	if out == nil {
+		t.Fatal("expected non-nil map returned for nil input")
+	}
+	if len(out) != 0 {
+		t.Fatalf("expected empty map, got %d keys", len(out))
+	}
+}
