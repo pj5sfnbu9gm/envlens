@@ -61,3 +61,15 @@ func TestReportExport_EmptyEnv(t *testing.T) {
 		t.Errorf("expected zero count, got: %s", buf.String())
 	}
 }
+
+func TestReportExport_UnknownFormat(t *testing.T) {
+	var buf bytes.Buffer
+	opts := reporter.ExportOptions{Format: "xml", Target: "staging"}
+	err := reporter.ReportExport(&buf, exportSample, opts)
+	if err == nil {
+		t.Fatal("expected error for unsupported format, got nil")
+	}
+	if !strings.Contains(err.Error(), "xml") {
+		t.Errorf("expected error to mention format name, got: %v", err)
+	}
+}
